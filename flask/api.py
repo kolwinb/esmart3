@@ -19,7 +19,7 @@ class esmart:
 
 	def ctlEsmart(self,content):
 		MESSAGE=self.readContent(content)
-		self.logger.info("MESSAGE : {}".format(MESSAGE))
+		#self.logger.info("MESSAGE : {}".format(MESSAGE))
 		self.ser.write(MESSAGE)
 		data=self.ser.read(100)
 		arrData=[]
