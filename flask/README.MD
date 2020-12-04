@@ -12,7 +12,7 @@
 
 ## Deployment
  - python virtual environmen
-   > source venv/bin/activate
+   > source ven/bin/activate
  - server up
    > ./server.py
  - check with browser
