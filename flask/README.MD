@@ -10,7 +10,13 @@
  - server.py
    > flask have been used
 
-
+## Deployment
+ - python virtual environmen
+   > source venv/bin/activate
+ - server up
+   > ./server.py
+ - check with browser
+   > localhost:5000/esmart3
 
 ## About Hexdecimal
 
