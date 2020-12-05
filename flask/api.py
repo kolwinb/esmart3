@@ -6,10 +6,10 @@ import logging
 
 class esmart:
 	def __init__(self):
-		logging.basicConfig(filename='esmart3.log', level=logging.INFO)
-		self.logger = logging.getLogger('esmart3')
+		#logging.basicConfig(filename='esmart3.log', level=logging.INFO)
+		#self.logger = logging.getLogger('esmart3')
 		#self.logger.setLevel(logging.DEBUG)
-		self.logger.info('Started')
+		#self.logger.info('Started')
 		self.config=Config()
 		self.ser = serial.Serial(self.config.dev,9600,timeout=0.1)
 		self.ser.port=self.config.dev
