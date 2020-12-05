@@ -188,7 +188,7 @@ class esmart:
 	def getTempParamJson(self,arrData):
 		page={
 			"Flag":"{}".format(self.getValue(arrData[8:10])),
-			"TempSel":"{}".format(self.config.tempParam[self.getValue(arrData[16:18])]),
+			"TempSel":"{}".format(self.config.tempParam[self.getValue(arrData[16:18])]p),
 
 		}
 		return page

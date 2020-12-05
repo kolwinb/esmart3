@@ -9,7 +9,8 @@ class Config:
 		self.batSys=["Auto","1*12V","2*12V","3*12V","4*12V"]
 		self.loadSwitchStatus=["Shutdown", "Open"]
 		self.enableTimeTwo=["Closing time 2 settings","Opening period 2 settings"]
-		
+		self.tempParam=["Centigrade","Fahrenheit"]
+
 		#Fixed time-light control mode:
 		self.periodOne={
 			5100:"Light control delay mode. (Start Voltage, Closed Voltage)",
@@ -106,6 +107,18 @@ class Config:
 			'db_EngSave':{'dataItem':0x10,'length':0x0a},
 
 		}
+
+		self.getTempParam=[
+			0xaa,
+			self.device['type'],
+			self.device['addr'],
+			self.command['CMD_GET'],
+			self.commandItem['db_TempParam']['dataItem'],
+			0x03,
+			0x00,
+			0x00,
+			self.commandItem['db_TempParam']['length']
+		]
 
 		self.getChgSts=[
 			0xaa,
