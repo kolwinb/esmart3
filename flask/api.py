@@ -49,20 +49,23 @@ class esmart:
 			return (self.getInformationJson(arrData))
 		elif (arrData[4] == 9):
 			return (self.getTempParamJson(arrData))
-		elif (arrData[4] == 10):
-			return (self.getEngSaveJson(arrData))
+		elif ((arrData[4] == 10) and (arrData[6] == 1)):
+			return (self.getMonthPowerJson(arrData))
+#		elif (arrData[4] == 10):
+#			return (self.getEngSaveJson(arrData))
+
 
 	#Charger stats json document 
 	def getChgStsJson(self,arrData):
 		ChargerStatus= {
 			"ChgMode" : self.config.chgMode[self.getValue(arrData[8:10])],
 			"InnerTemp" : "{}C".format(self.getValue(arrData[28:30])),
-			"CO2" : "{}kg".format(self.getValue(arrData[32:36])/10),
+			"CO2" : "{}kg".format((self.getValue(arrData[32:34]) + self.getValue(arrData[34:36]))/10),
 			"PV" : "{}V".format(self.getValue(arrData[10:12])/10),
 			"OutVolt" : "{}V".format(self.getValue(arrData[16:18])/10),
 			"Fault" : "{}".format(self.getFault(arrData[36:38])),
 			"SystemReminder" : "{}".format(self.getValue(arrData[38:40])),
-			"Other" : "{}".format(self.getValue(arrData[40:42])),
+#			"Other" : "{}".format(self.getValue(arrData[40:42])),
 			#"Battery" : {
 			"BatVolt":"{}V".format(self.getValue(arrData[12:14])/10),
 			"ChgCurr":"{}A".format(self.getValue(arrData[14:16])/10),
@@ -100,14 +103,14 @@ class esmart:
 			"StartCnt":"{}".format(self.getValue(arrData[14:16])),
 			"LastFaultInfo":"{}".format(self.getValue(arrData[16:18])),
 			"FaultCnt":"{}".format(self.getValue(arrData[18:20])),
-			"TodayEng":"{}wh".format(self.getValue(arrData[20:24])),
-			"TodayEngDate":"{}".format(self.getValue(arrData[24:28])),
-			"MonthEng":"{}wh".format(self.getValue(arrData[28:32])),
-			"MonthEngDate":"{}".format(self.getValue(arrData[32:36])),
-			"TotalEng":"{}wh".format(self.getValue(arrData[36:40])),
-			"LoadTodayEng":"{}wh".format(self.getValue(arrData[40:44])),
-			"LoadMonthEng":"{} wh".format(self.getValue(arrData[44:48])),
-			"LoadTotalEng":"{} wh".format(self.getValue(arrData[48:52])),
+			"PVTodayEng":"{} wh".format(self.getValue(arrData[20:22]) + self.getValue(arrData[22:24])),
+			"TodayEngDate":"{}".format(self.getValue(arrData[24:26]) + self.getValue(arrData[26:28])),
+			"PVMonthEng":"{} kwh".format(self.getValue(arrData[28:30]) + self.getValue(arrData[30:32])/1000),
+			"MonthEngDate":"{}".format(self.getValue(arrData[32:34]) + self.getValue(arrData[34:36])),
+			"PVTotalEng":"{} kwh".format(self.getValue(arrData[36:38]) + self.getValue(arrData[38:40])/1000),
+			"LoadTodayEng":"{} wh".format(self.getValue(arrData[40:42]) + self.getValue(arrData[42:44])),
+			"LoadMonthEng":"{} kwh".format(self.getValue(arrData[44:46]) + self.getValue(arrData[46:48])/1000),
+			"LoadTotalEng":"{} kwh".format(self.getValue(arrData[48:50]) + self.getValue(arrData[50:52])/1000),
 			"BacklightTime":"{}S".format(self.getValue(arrData[52:54])),
 			"SwitchEnable":"{}".format(self.getValue(arrData[54:56])),
 		}
@@ -142,10 +145,10 @@ class esmart:
 			"Turn off the loads PV voltage":"{}V".format(self.getValue(arrData[16:18])*0.1),
 			"Open the light-control load time delay":"{}min".format(self.getValue(arrData[18:20])),
 			"Close the light-control load time delay":"{}min".format(self.getValue(arrData[20:22])),
-			"Open the load time in the evening":"{}".format(self.getValue(arrData[22:26])),
-			"Close the load in the evening":"{}".format(self.getValue(arrData[26:30])),
-			"Open the load in the morning":"{}".format(self.getValue(arrData[30:34])),
-			"Close the load in the morning":"{}".format(self.getValue(arrData[34:38])),
+			"Open the load time in the evening":"{}".format(self.getValue(arrData[22:24]) + self.getValue(arrData[24:26])),
+			"Close the load in the evening":"{}".format(self.getValue(arrData[26:28]) + self.getValue(arrData[28:30])),
+			"Open the load in the morning":"{}".format(self.getValue(arrData[30:32]) + self.getValue(arrData[32:34])),
+			"Close the load in the morning":"{}".format(self.getValue(arrData[34:36]) + self.getValue(arrData[36:38])),
 			"Load switch status":"{}".format(self.config.loadSwitchStatus[self.getValue(arrData[38:40])]),
 			"Enable Time 2":"{}".format(self.config.enableTimeTwo[self.getValue(arrData[40:42])]),
 		}
@@ -159,7 +162,7 @@ class esmart:
 		page={
 			"MagicNum":"{}".format(self.getValue(arrData[8:10])),
 			"eRemoteCommand":"{}".format(self.getValue(arrData[10:12])),
-			"uwData":"{}".format(self.getValue(arrData[12:28])),
+			"uwData":"{}".format(self.getValue(arrData[12:14]) + self.getValue(arrData[14:16]) + self.getValue(arrData[16:18])),
 
 		}
 		return page
@@ -194,7 +197,27 @@ class esmart:
 		return page
 
 	def getEngSaveJson(self,arrData):
+		page={
+			"Flag":"{}".format(self.getValue(arrData[8:10])),
+			"Power":"{}".format(self.getValue(arrData[10:12])),
+
+		}
+		return page
+
+	def getMonthPowerJson(self,arrData):
+
+		#kw calculation (4 bytes = 2 bytes + 2 bytes = kw)
 		page={}
+		inPoint=8
+		for month in self.config.month:
+			outPoint=inPoint+2
+			b_inPoint=outPoint
+			b_outPoint=outPoint+2
+			page[month]=self.getValue(arrData[inPoint:outPoint]) + self.getValue(arrData[b_inPoint:b_outPoint])
+			inPoint=b_outPoint
+			#outPoint=inPoint+2
+			#page[month]=int.from_bytes(arrData[inPoint:outPoint],byteorder='little',signed=False)
+			#inPoint=outPoint
 		return page
 
 	#find fault

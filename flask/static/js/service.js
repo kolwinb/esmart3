@@ -1,11 +1,11 @@
 $(document).ready(function () {
 	//default page
 	url=$('.active').attr("data");
-	dataItemArr=["#status","#battery","#log","#parameters","#load","#remotecontrol","#proparam","#information","#temparam","#engsave"];
+	dataItemArr=["status","battery","log","parameters","load","remotecontrol","proparam","information","temparam","engsave", "monthpower"];
 
 	$.each(dataItemArr, function (index, val) {
 		//console.log(index+" : "+val);
-		$(dataItemArr[index]).click(function (e) {
+		$('#'+dataItemArr[index]).click(function (e) {
 			console.log(dataItemArr[index]+" Trigger");
 			e.preventDefault();
 			url=$(this).attr("data");

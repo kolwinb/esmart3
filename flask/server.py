@@ -71,6 +71,13 @@ def TempParam():
 		TempParam=esmart()
 		return jsonify(TempParam.ctlEsmart(TempParam.config.getTempParam))
 
+
+@app.route("/MonthPower", methods=['GET', 'POST'])
+def MonthPower():
+	if request.method == 'GET':
+		MonthPower=esmart()
+		return jsonify(MonthPower.ctlEsmart(MonthPower.config.getMonthPower))
+
 @app.route("/EngSave", methods=['GET', 'POST'])
 def EngSave():
 	if request.method == 'GET':

@@ -10,6 +10,7 @@ class Config:
 		self.loadSwitchStatus=["Shutdown", "Open"]
 		self.enableTimeTwo=["Closing time 2 settings","Opening period 2 settings"]
 		self.tempParam=["Centigrade","Fahrenheit"]
+		self.month=["01. Jan","02. Feb","03. Mar","04. Apr","05. May","06. Jun","07. Jul","08. Aug","09. Sep","10. Oct","11. Nov","12. Dec"]
 
 		#Fixed time-light control mode:
 		self.periodOne={
@@ -83,29 +84,22 @@ class Config:
 			'CMD_ERR':0x7F
 		}
 
-		#length of dataitem may differ
-		#30=0x1e,
-		#20=0x14,
-		#50=0x32,
-		#6=0x06,
-		#14=0x0e,
-		#8=0x08,
-		#12=0x0c,
-		#10=0x0a
-
 		self.commandItem = {
-			'db_ChgSts':{'dataItem':0x00,'length':0x20},
-			'db_BatParam':{'dataItem':0x01,'length':0x16},
-			'db_Log':{'dataItem':0x02,'length':0x32},
+			'db_ChgSts':{'dataItem':0x00,'length':0x1e},
+			'db_BatParam':{'dataItem':0x01,'length':0x14},
+			'db_Log':{'dataItem':0x02,'length':0x30},
 			'db_parameters':{'dataItem':0x03,'length':0x1a},
-			'db_LoadParam':{'dataItem':0x04,'length':0x24},
+			'db_LoadParam':{'dataItem':0x04,'length':0x22},
 			'db_ChgDebug':{'dataItem':0x05,'length':0x1e},
-			'db_remoteControl':{'dataItem':0x06,'length':0x14},
+			'db_remoteControl':{'dataItem':0x06,'length':0x12},
 			'db_ProParam':{'dataItem':0x07,'length':0x0e},
-			'db_Information':{'dataItem':0x08,'length':0x28},
-			'db_TempParam':{'dataItem':0x09,'length':0x0c},
-			'db_EngSave':{'dataItem':0x10,'length':0x0a},
-
+			'db_Information':{'dataItem':0x08,'length':0x26},
+			'db_TempParam':{'dataItem':0x09,'length':0x0e},
+			'db_EngSave':{'dataItem':0x0a,'length':0x0a},
+			'db_EngSave_Month_Power':{'dataItem':0x0a,'length':0x30},
+			'db_EngSave_Month_Load_Power':{'dataItem':0x0a,'length':0x30},
+			'db_EngSave_Day_Power':{'dataItem':0x0a,'length':0x7c},
+			'db_EngSave_Day_Load_Power':{'dataItem':0x0a,'length':0x7c},
 		}
 
 		self.getTempParam=[
@@ -240,6 +234,7 @@ class Config:
 			self.commandItem['db_TempParam']['length']
 		]
 
+
 		self.getEngSave=[
 			0xaa,
 			self.device['type'],
@@ -250,4 +245,52 @@ class Config:
 			0x00,
 			0x00,
 			self.commandItem['db_EngSave']['length']
+		]
+
+		self.getMonthPower=[
+			0xaa,
+			self.device['type'],
+			self.device['addr'],
+			self.command['CMD_GET'],
+			self.commandItem['db_EngSave_Month_Power']['dataItem'],
+			0x03,
+			0x01,
+			0x00,
+			self.commandItem['db_EngSave_Month_Power']['length']
+		]
+
+		self.getMonthLoadPower=[
+			0xaa,
+			self.device['type'],
+			self.device['addr'],
+			self.command['CMD_GET'],
+			self.commandItem['db_EngSave_Month_Load_Power']['dataItem'],
+			0x03,
+			0x19,
+			0x00,
+			self.commandItem['db_EngSave_Month_Load_Power']['length']
+		]
+
+		self.getDayPower=[
+			0xaa,
+			self.device['type'],
+			self.device['addr'],
+			self.command['CMD_GET'],
+			self.commandItem['db_EngSave_Day_Power']['dataItem'],
+			0x03,
+			0x31,
+			0x00,
+			self.commandItem['db_EngSave_Day_Power']['length']
+		]
+
+		self.getDayLoadPower=[
+			0xaa,
+			self.device['type'],
+			self.device['addr'],
+			self.command['CMD_GET'],
+			self.commandItem['db_EngSave_Day_Load_Power']['dataItem'],
+			0x03,
+			0x6f,
+			0x00,
+			self.commandItem['db_EngSave_Day_Load_Power']['length']
 		]

@@ -7,7 +7,6 @@
 
 #recomended method
 sysctl -w fs.file-max=100000
-fs.file-max=100000
 echo "fs.file-max = 100000" >> /etc/sysctl.conf
 sysctl -p
 cat /proc/sys/fs/file-max
