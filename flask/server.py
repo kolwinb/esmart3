@@ -1,13 +1,30 @@
 #!venv/bin/python3
 from api import esmart
-from flask import render_template, Flask, request, jsonify
+import Rpi
+from flask import render_template, Flask, request, jsonify, json
 import logging
+
 
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
 	return render_template('index.html')
+
+
+@app.route("/SwitchStatus", methods=['GET', 'POST'])
+def getSwitchStatus():
+	if request.method == 'POST':
+		pinState=Rpi.RpiPin()
+		return jsonify(pinState.getPinStatus())
+
+@app.route("/SwitchToggle", methods=['GET', 'POST'])
+def setSwitchToggle():
+	if request.method == 'POST':
+		data = request.form
+#		data = json.loads(request.data)
+		setpinState=Rpi.RpiPin()
+		return jsonify(setpinState.setPinState(data))
 
 @app.route("/ChgSts", methods=['GET', 'POST'])
 def chgSts():
