@@ -18,7 +18,7 @@ $(document).ready(function () {
 	}); //$.each
 
 setInterval(function() {
-  	console.log(url+" tick");
+  	//console.log(url+" tick");
 	//trigger click event  on active content
 	jQuery('.active').trigger('click');
 
@@ -36,6 +36,7 @@ function dataRequest(url){
 				var_json=JSON.stringify(info)
 				var_html='<div class="container" width="50%"><ul class="list-group">'
 				Object.keys(info).forEach(function(key) {
+					console.log(key);
 					var_html += '<li class="list-group-item">'+key+'<span class="badge">'+info[key]+'</span></li>'
 				})
 				var_html += '</ul></div>'
