@@ -11,18 +11,19 @@ class RpiPin():
 		GPIO.setup(pin,GPIO.OUT)
 
 	def setPinState(self,data):
-		for key,value in data.items():
+		for key,val in data.items():
 			if (key == "acpower"):
-				self.setGpioOutState(self.acpin,int(value))
+				self.setGpioOutState(self.acpin,val)
 			elif (key == "pcpower"):
-				self.setGpioOutState(self.pcpin,int(value))
+				self.setGpioOutState(self.pcpin,val)
 
 		return self.getPinStatus()
 
 	#enable/disable state of pin
-	def setGpioOutState(self,pin,value):
+	def setGpioOutState(self,pin,val):
 		self.setPinConfi(pin)
-		GPIO.output(pin, value)
+		print(val)
+		GPIO.output(pin,int(val))
 
 	#read pin status
 	def readPin(self,pin):

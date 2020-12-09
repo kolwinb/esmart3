@@ -52,21 +52,49 @@ $('#acpower').click(function () {
 
 if($('#acpower').prop('checked')) {
 console.log('ac switch on');
-setSwitchValues('acpower',"0");
+//data=["acpower",1]
+var data = {
+   "acpower" : 1
+}
+setSwitchValues(data);
 } else {
 console.log('ac switch off');
-setSwitchValues('acpower',"1");
+//data=["acpower",0]
+var data = {
+	"acpower" : 0
+}
+setSwitchValues(data);
+}
+});
+
+$('#pcpower').click(function () {
+
+if($('#pcpower').prop('checked')) {
+console.log('pc switch on');
+//data=["acpower",1]
+var data = {
+   "pcpower" : 1
+}
+setSwitchValues(data);
+} else {
+console.log('pc switch off');
+//data=["acpower",0]
+var data = {
+	"pcpower" : 0
+}
+setSwitchValues(data);
 }
 });
 
 
 } //function end
 
-function setSwitchValues(key,value){
+function setSwitchValues(data){
 $.ajax({
 url:"/esmart3/SwitchToggle",
 type:"POST",
-data:{"acpower":1},
+data: data,
+dataType:"json",
 success: function (data) {
 console.log(data);
 
@@ -74,7 +102,7 @@ console.log(data);
 
 }); //ajax
 
-}
+} //function end
 
 
 function dataRequest(url){
@@ -85,7 +113,7 @@ function dataRequest(url){
 			data:"",
 			success: function (info) {
 				var_json=JSON.stringify(info)
-				var_html='<div class="container" width="50%"><ul class="list-group">'
+				var_html='<div class="container" style="width:90%;margin-left:0px"><ul class="list-group">'
 				Object.keys(info).forEach(function(key) {
 					//console.log(url);
 					var_html += '<li class="list-group-item">'+key+'<span class="badge">'+info[key]+'</span></li>'
