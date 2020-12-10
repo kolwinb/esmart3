@@ -1,4 +1,3 @@
-#!venv/bin/python3
 from api import esmart
 import Rpi
 from flask import render_template, Flask, request, jsonify, json

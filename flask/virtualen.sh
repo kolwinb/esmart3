@@ -1,6 +1,7 @@
 pip3 install virtualenv
-virtualenv venv
-virtualenv -p /usr/bin/python3 venv
+virtualenv -p python3 venv
 source venv/bin/activate
-pip3 install flask pyserial requests
+#check where the python interpreter should be the venv inside
+which python3 
+pip3 install flask pyserial requests RPi.GPIO
 

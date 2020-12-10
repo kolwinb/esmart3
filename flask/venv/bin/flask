@@ -1,4 +1,4 @@
-#!/etc/opt/esmart3/esmart-flask/venv/bin/python3
+#!/etc/opt/esmart3/flask/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
