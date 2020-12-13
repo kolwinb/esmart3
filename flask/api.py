@@ -4,6 +4,8 @@ from settings import Config
 import struct, time, serial, socket, requests
 import logging
 
+from Rpi import RpiPin
+
 class esmart:
 	def __init__(self):
 		#logging.basicConfig(filename='esmart3.log', level=logging.INFO)
@@ -13,6 +15,7 @@ class esmart:
 		self.config=Config()
 		self.ser = serial.Serial(self.config.dev,9600,timeout=0.1)
 		self.ser.port=self.config.dev
+		self.varBatCap=0
 #	def __del__(self):
 #		self.ser.close()
 
@@ -57,6 +60,7 @@ class esmart:
 
 	#Charger stats json document 
 	def getChgStsJson(self,arrData):
+		self.varBatCap=self.getValue(arrData[30:32])
 		ChargerStatus= {
 			"ChgMode" : self.config.chgMode[self.getValue(arrData[8:10])],
 			"InnerTemp" : "{}C".format(self.getValue(arrData[28:30])),
@@ -71,15 +75,28 @@ class esmart:
 			"ChgCurr":"{}A".format(self.getValue(arrData[14:16])/10),
 			"ChgPwr":"{}W".format(self.getValue(arrData[22:24])),
 			"BatTemp":"{}C".format(self.getValue(arrData[26:28])),
-			"BatCap":"{}%".format(self.getValue(arrData[30:32])),
-			#	},
+			"BatCap":"{}%".format(self.varBatCap),
+		 	#	},
 			#"Load" : {
 			"LoadVolt":"{}V".format(self.getValue(arrData[18:20])/10),
 			"LoadCurr":"{}A".format(self.getValue(arrData[20:22])/10),
 			"LoadPower":"{}W".format(self.getValue(arrData[24:26])),
 			#	}
 		}
+
 		return ChargerStatus
+
+	def setAutoPower(self):
+		#make threhold to switch off pc
+		if ( self.varBatCap <= 50 ):
+			print("danger")
+			RpiPin().setPinState({"pcpower":0})
+			#RpiPin().setPinState({"acpower":1})
+		elif ( self.varBatCap >= 65 ):
+			print("charged")
+			RpiPin().setPinState({"pcpower":1})
+			#RpiPin().setPinState({"acpower":1})
+
 
 	def getBatParamJson(self,arrData):
 		page={
