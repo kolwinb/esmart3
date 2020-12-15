@@ -89,13 +89,15 @@ class esmart:
 	def setAutoPower(self):
 		#make threhold to switch off pc
 		if ( self.varBatCap <= 50 ):
-			print("danger")
+			print("automatically switch off pcpower <= 50%")
 			RpiPin().setPinState({"pcpower":0})
 			#RpiPin().setPinState({"acpower":1})
-		elif ( self.varBatCap >= 65 ):
-			print("charged")
-			RpiPin().setPinState({"pcpower":1})
-			#RpiPin().setPinState({"acpower":1})
+		elif ( self.varBatCap >= 60 ):
+			pinData=RpiPin().getPinStatus()
+			if (pinData.get('pcpower') == 0):
+				print("automatically switch on pcpower >= 65%")
+				RpiPin().setPinState({"pcpower":1})
+				#RpiPin().setPinState({"acpower":1})
 
 
 	def getBatParamJson(self,arrData):
