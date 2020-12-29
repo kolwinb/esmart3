@@ -1,9 +1,12 @@
 import RPi.GPIO as GPIO
+from time import sleep
 
 class RpiPin():
 	def __init__(self):
 		self.acpin=18
 		self.pcpin=17
+		self.inverter=4
+		self.rx570x4=16
 
 	def setPinConfi(self,pin):
 		GPIO.setwarnings(False)
@@ -12,10 +15,14 @@ class RpiPin():
 
 	def setPinState(self,data):
 		for key,val in data.items():
-			if (key == "acpower"):
+			if (key == "inverter"):
+				self.setGpioOutState(self.inverter,val)
+			elif (key == "acpower"):
 				self.setGpioOutState(self.acpin,val)
 			elif (key == "pcpower"):
 				self.setGpioOutState(self.pcpin,val)
+			elif (key == "rx570x4"):
+				self.setGpioOutState(self.rx570x4,val)
 
 		return self.getPinStatus()
 
@@ -33,7 +40,9 @@ class RpiPin():
 
 	def getPinStatus(self):
 		data = {
+			'inverter':self.readPin(self.inverter),
 			'acpower':self.readPin(self.acpin),
 			'pcpower':self.readPin(self.pcpin)
+
 			}
 		return data

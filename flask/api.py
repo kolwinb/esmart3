@@ -89,14 +89,20 @@ class esmart:
 	def setAutoPower(self):
 		#make threhold to switch off pc
 		if ( self.varBatCap <= 50 ):
-			print("automatically switch off pcpower <= 50%")
-			RpiPin().setPinState({"pcpower":0})
+			print("automatically switch off inverter <= 50%")
+			autoData={
+						"inverter":0
+					}
+			RpiPin().setPinState(autodata)
 			#RpiPin().setPinState({"acpower":1})
-		elif ( self.varBatCap >= 60 ):
+		elif ( self.varBatCap >= 65 ):
 			pinData=RpiPin().getPinStatus()
-			if (pinData.get('pcpower') == 0):
-				print("automatically switch on pcpower >= 65%")
-				RpiPin().setPinState({"pcpower":1})
+			if (pinData.get('inverter') == 0):
+				print("automatically switch on inverter >= 65%")
+				autoData={
+						"inverter":1
+					}
+				RpiPin().setPinState(autoData)
 				#RpiPin().setPinState({"acpower":1})
 
 

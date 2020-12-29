@@ -12,7 +12,7 @@ $(document).ready(function () {
 			e.preventDefault();
 			url=$(this).attr("data");
 			varAutoPower={
-					"autopower":$('#autopower').attr("data")
+					"autopower":$('#autopower').attr("data"),
 				    }
 			dataRequest(url,varAutoPower);
 			//remove active class in menu item(green box)
@@ -33,6 +33,7 @@ setInterval(function() {
 
 }); //document
 
+//get switch status
 switchStatus();
 
 //ac and pc power handler
@@ -65,7 +66,35 @@ $('#autopower').click(function () {
 		}
 });
 
-//manual acpower on/off 
+//inverter on/off 
+$('#inverter').click(function () {
+
+	if($('#inverter').prop('checked')) {
+		console.log('inverter power saver on');
+		//data=["acpower",1]
+		//inverter make pulse until ac load consume, so if not consume ac power, auto-switch will misbehave
+		var data = {
+		   "acpower" : 1,
+		   "pcpower" : 1,
+		   "inverter" : 1,
+		}
+		//send data to server
+		setSwitchValues(data);
+	} else {
+		console.log('inverter power saver off');
+		//data=["acpower",0]
+		var data = {
+//			"acpower" : 0,
+//			"pcpower": 0,
+			"inverter" : 0,
+		}
+		//send data to server
+		setSwitchValues(data);
+	}
+	location.reload(); //reload page
+});
+
+//acpower on/off 
 $('#acpower').click(function () {
 
 	if($('#acpower').prop('checked')) {
@@ -85,7 +114,7 @@ $('#acpower').click(function () {
 	}
 });
 
-//manual pc power off/on
+//pc power off/on
 $('#pcpower').click(function () {
 
 	if($('#pcpower').prop('checked')) {
@@ -105,12 +134,35 @@ $('#pcpower').click(function () {
 	}
 });
 
+//rx570x4 off/on
+//ac power up
+$('#rx570x4').click(function () {
+
+	if($('#rx570x4').prop('checked')) {
+		console.log('rx570x4 on');
+		//data=["acpower",1]
+		//mechanical relay has needed to switch on by 0
+		var data = {
+		   "rx570x4" : 0
+		}
+		setSwitchValues(data);
+	} else {
+		console.log('rx570x4 off');
+		//data=["acpower",0]
+		var data = {
+			"rx570x4" : 1
+		}
+		setSwitchValues(data);
+	}
+});
+
 
 
 
 
 } //function end
 
+//raspberry pi pin state
 function setSwitchValues(data){
 $.ajax({
 url:"/esmart3/SwitchToggle",
