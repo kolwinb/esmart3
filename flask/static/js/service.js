@@ -46,7 +46,8 @@ $.ajax ({
 	success: function(data){
                 Object.keys(data).forEach(function(key) {
 			$('#'+key).prop('checked',data[key]);
-			//console.log(data['acpower']);
+			console.log(data);
+		
 		});
 
 	}
@@ -74,9 +75,9 @@ $('#inverter').click(function () {
 		//data=["acpower",1]
 		//inverter make pulse until ac load consume, so if not consume ac power, auto-switch will misbehave
 		var data = {
-		   "acpower" : 1,
-		   "pcpower" : 1,
-		   "inverter" : 1,
+//		   "acpower" : 1,
+//		   "pcpower" : 1,
+		   "inverter" : 0
 		}
 		//send data to server
 		setSwitchValues(data);
@@ -86,7 +87,7 @@ $('#inverter').click(function () {
 		var data = {
 //			"acpower" : 0,
 //			"pcpower": 0,
-			"inverter" : 0,
+			"inverter" : 1
 		}
 		//send data to server
 		setSwitchValues(data);
@@ -162,7 +163,7 @@ $('#rx570x4').click(function () {
 
 } //function end
 
-//raspberry pi pin state
+//raspberry pi change pin state
 function setSwitchValues(data){
 $.ajax({
 url:"/esmart3/SwitchToggle",
