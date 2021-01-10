@@ -75,7 +75,7 @@ class esmart:
 			"ChgCurr":"{}A".format(self.getValue(arrData[14:16])/10),
 			"ChgPwr":"{}W".format(self.getValue(arrData[22:24])),
 			"BatTemp":"{}C".format(self.getValue(arrData[26:28])),
-			"BatCap":"{}%".format(self.varBatCap),
+			"BatCap":"{}".format(self.varBatCap),
 		 	#	},
 			#"Load" : {
 			"LoadVolt":"{}V".format(self.getValue(arrData[18:20])/10),
@@ -92,20 +92,27 @@ class esmart:
 			print("automatically switch off inverter <= 50%")
 			#inverter off position relay 
 			autoData={
-						"inverter":1
+						"inverter":0,
+						"pcpower":0
 					}
-			RpiPin().setPinState(autodata)
+			RpiPin().setPinState(autoData)
+			#start pc to recover rtx3080 vga
+			time.sleep(10)
+			RpiPin().setPinState({"pcpower":1})
 			#RpiPin().setPinState({"acpower":1})
-		elif ( self.varBatCap >= 65 ):
+		elif ( self.varBatCap >= 80 ):
 			pinData=RpiPin().getPinStatus()
 			if (pinData.get('inverter') == 0):
 				print("automatically switch on inverter >= 65%")
 				#inverter on position
 				autoData={
-						"inverter":0
+						"inverter":1,
+						"pcpower":0
 					}
 				RpiPin().setPinState(autoData)
-				#RpiPin().setPinState({"acpower":1})
+				#start pc after 20 seconds
+				time.sleep(20)
+				RpiPin().setPinState({"pcpower":1})
 
 
 	def getBatParamJson(self,arrData):

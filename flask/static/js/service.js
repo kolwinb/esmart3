@@ -23,6 +23,7 @@ $(document).ready(function () {
 		}); //status]		
 	}); //$.each
 
+//loop page content every 1seconds
 setInterval(function() {
   	//console.log(url+" tick");
 	//trigger click event  on active content
@@ -31,7 +32,12 @@ setInterval(function() {
 },1000);
 
 
+
+
 }); //document
+
+
+
 
 //get switch status
 switchStatus();
@@ -77,7 +83,7 @@ $('#inverter').click(function () {
 		var data = {
 //		   "acpower" : 1,
 //		   "pcpower" : 1,
-		   "inverter" : 0
+		   "inverter" : 1
 		}
 		//send data to server
 		setSwitchValues(data);
@@ -87,12 +93,12 @@ $('#inverter').click(function () {
 		var data = {
 //			"acpower" : 0,
 //			"pcpower": 0,
-			"inverter" : 1
+			"inverter" : 0
 		}
 		//send data to server
 		setSwitchValues(data);
 	}
-	location.reload(); //reload page
+//	location.reload(); //reload page
 });
 
 //acpower on/off 
@@ -144,14 +150,14 @@ $('#rx570x4').click(function () {
 		//data=["acpower",1]
 		//mechanical relay has needed to switch on by 0
 		var data = {
-		   "rx570x4" : 0
+		   "rx570x4" : 1
 		}
 		setSwitchValues(data);
 	} else {
 		console.log('rx570x4 off');
 		//data=["acpower",0]
 		var data = {
-			"rx570x4" : 1
+			"rx570x4" : 0
 		}
 		setSwitchValues(data);
 	}
@@ -190,8 +196,8 @@ function dataRequest(url,varAutoPower){
 			var_json=JSON.stringify(info)
 			var_html='<div class="container" style="width:90%;margin-left:0px"><ul class="list-group">'
 			Object.keys(info).forEach(function(key) {
-				//console.log(url);
-				var_html += '<li class="list-group-item">'+key+'<span class="badge">'+info[key]+'</span></li>'
+//				console.log(info);
+				var_html += '<li class="list-group-item" id='+key+' value='+info[key]+'>'+key+'<span class="badge">'+info[key]+'</span></li>'
 			})
 			var_html += '</ul></div>'
 			$('.content').html(var_html);

@@ -7,6 +7,10 @@ class RpiPin():
 		self.pcpin=17
 		self.inverter=21
 		self.rx570x4=16
+		#default position this will refresh if you browser refresh
+		#put crontab to default 1 in inverter and rx570x4
+#		self.data={"inverter":"0","rx570x4":"0"}
+#		self.setPinState(self.data)
 
 	def setPinConfi(self,pin):
 		GPIO.setwarnings(False)
@@ -17,14 +21,14 @@ class RpiPin():
 		for key,val in data.items():
 			if (key == "inverter"):
 				#this pin should be inverse
-				self.setGpioOutState(self.inverter,val)
+				self.setGpioOutState(self.inverter,self.setRelayPinOut(int(val)))
 			elif (key == "acpower"):
-				self.setGpioOutState(self.acpin,val)
+				self.setGpioOutState(self.acpin,int(val))
 			elif (key == "pcpower"):
-				self.setGpioOutState(self.pcpin,val)
+				self.setGpioOutState(self.pcpin,int(val))
 			elif (key == "rx570x4"):
 				#this pin should be inverse
-				self.setGpioOutState(self.rx570x4,val)
+				self.setGpioOutState(self.rx570x4,self.setRelayPinOut(int(val)))
 
 		return self.getPinStatus()
 
@@ -32,7 +36,7 @@ class RpiPin():
 	def setGpioOutState(self,pin,val):
 		self.setPinConfi(pin)
 		print(val)
-		GPIO.output(pin,int(val))
+		GPIO.output(pin,val)
 
 	#read pin status
 	def readPin(self,pin):
