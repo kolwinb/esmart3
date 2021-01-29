@@ -93,10 +93,13 @@ class esmart:
 			#inverter off position relay 
 			autoData={
 						"inverter":0,
-						"pcpower":0
+						"pcpower":0,
+						"rx570x4":0,
 					}
 			RpiPin().setPinState(autoData)
 			#start pc to recover rtx3080 vga
+			time.sleep(5)
+			RpiPin().setPinState({"rx570x4":1})
 			time.sleep(10)
 			RpiPin().setPinState({"pcpower":1})
 			#RpiPin().setPinState({"acpower":1})
@@ -107,11 +110,14 @@ class esmart:
 				#inverter on position
 				autoData={
 						"inverter":1,
-						"pcpower":0
+						"pcpower":0,
+						"rx570x4":0,
 					}
 				RpiPin().setPinState(autoData)
 				#start pc after 20 seconds
-				time.sleep(20)
+				time.sleep(5)
+				RpiPin().setPinState({"rx570x4":1})
+				time.sleep(10)
 				RpiPin().setPinState({"pcpower":1})
 
 
