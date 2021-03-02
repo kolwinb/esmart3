@@ -18,6 +18,17 @@
  - check with browser
    > localhost:5000/esmart3
 
+## Initialize 4 relay board
+ - cronjob
+   > @reboot root /usr/bin/python /etc/opt/esmart3/flask/defaultPinStatus.py
+   > 31 22 * * * root /usr/bin/python /etc/opt/esmart3/flask/switch-on.py
+   > 28 18 * * * root /usr/bin/python /etc/opt/esmart3/flask/switch-off.py
+   > #31 22 * * * root /etc/opt/rpi-timer/rx570_on.sh
+   > #32 22 * * * root /etc/opt/rpi-timer/ceb_on.sh
+   > #20 18 * * * root /etc/opt/rpi-timer/ceb_off.sh
+   > #20 18 * * * root /etc/opt/rpi-timer/rx570_off.sh
+
+
 ## About Hexdecimal
 
 1. Recieved Code
