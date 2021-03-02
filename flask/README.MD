@@ -14,7 +14,7 @@
  - python virtual environmen
    > source ven/bin/activate
  - server up
-   > ./server.py
+   > python3 server.py
  - check with browser
    > localhost:5000/esmart3
 
