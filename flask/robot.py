@@ -3,9 +3,13 @@ from Rpi import RpiPin
 import logging
 from time import sleep
 from datetime import datetime, date, time
-
+import switchon, switchoff
 
 def runRobot(BatCap):
+	rx570=16
+	pc=17
+	ac=18
+	
 	print ("Battery Level: {}% (low < 50, high > 90)".format(BatCap))
 	now=datetime.now()
 	print ("Current Date :{}".format(now))
@@ -19,6 +23,17 @@ def runRobot(BatCap):
 			print ("info : Battery High ({}%)".format(BatCap))
 			#send signal to inverter turn on (ongrid off)
 			RpiPin().setPinState({"inverter":1})
+	elif (( now.hour == 18 ) and (now.minute == 28)):
+		#time off (6:28 pm)
+		switchon.setPinRelay(rx570)
+		time.sleep(5)
+		switchon.setPin(pc)
+		switchon.setPin(ac)
+	elif (( now.hour == 22 ) and (now.minute == 31)):
+		#time on (10:31 pm)
+		switchoff.setPinRelay(rx570)
+		switchoff.setPin(pc)
+		switchoff.setPin(ac)
 	else:
 		pinStatus=RpiPin().getPinStatus()
 		if (pinStatus["inverter_serial"] == 1):
@@ -44,5 +59,5 @@ while True:
 	checkOtherSwitch()
 	#automate base on battery level
 	runRobot(int(BatCap))
-	sleep(2)
+	sleep(1)
 
