@@ -28,6 +28,30 @@
    > #20 18 * * * root /etc/opt/rpi-timer/ceb_off.sh
    > #20 18 * * * root /etc/opt/rpi-timer/rx570_off.sh
 
+## switching on only inverter 
+ - python switch-on-inverter.py
+   > it has two relay status
+   > relay 1 : send signal to inverter module (pin 21)
+   > relay 2 : change 230v to inverter 230v (pin 20)
+
+## switching off only inverter
+ - python switch-off-inverter.py
+
+## switching others
+ - python switch-on.py
+   > pc : 17 (rpi with solid state relay)
+   > ac : 18 (rpi with solid state relay)
+   > secondary supply : 16 (rpi with relay module)
+
+## Esmart3 ip address issue
+ - checking noip2 process
+   > /usr/local/bin/noip2
+   > Error! sent 1 requests, dynupdate.no-ip.com responded with 0 replies./Error info saved in /tmp/NO-IPXNKvpQ
+   > solution:
+   > login to 192.168.152.1 (firewall pc)
+   > /usr/local/noip2 -C (you have to enter username, password, interval time)
+   > /usr/local/etc/no-ip2.conf
+   > error has gone
 
 ## About Hexdecimal
 

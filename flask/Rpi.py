@@ -56,7 +56,8 @@ class RpiPin():
 		data = {
 			'acpower':self.readPin(self.acpin),
 			'pcpower':self.readPin(self.pcpin),
-			'inverter':self.setRelayPinOut(self.readPin(self.inverter)),
+			'inverter_serial':self.setRelayPinOut(self.readPin(self.inverter)),
+			'inverter_relay':self.setRelayPinOut(self.readPin(self.invRelay)),
 			'rx570x4':self.setRelayPinOut(self.readPin(self.rx570x4))
 			}
 		return data
