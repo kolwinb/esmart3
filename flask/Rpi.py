@@ -6,7 +6,7 @@ class RpiPin():
 		self.acpin=18
 		self.pcpin=17
 		self.inverter=21
-		self.invRelay=20
+		self.fan=20
 		self.rx570x4=16
 		#default position this will refresh if you browser refresh
 		#put crontab to default 1 in inverter and rx570x4
@@ -22,14 +22,14 @@ class RpiPin():
 		for key,val in data.items():
 			if (key == "inverter"):
 				#this pin should be inverse
-				#inverter on
+				#invt mode on
 				self.setGpioOutState(self.inverter,self.setRelayPinOut(int(val)))
 				#delay to swith relay between interter-->load
 #				if (val == 1):
 #					self.setGpioOutState(self.invRelay,self.setRelayPinOut(int(val)))
 #				else:
-				sleep(5)
-				self.setGpioOutState(self.invRelay,self.setRelayPinOut(int(val)))
+				#sleep(5)
+				self.setGpioOutState(self.fan,self.setRelayPinOut(int(val)))
 			elif (key == "acpower"):
 				self.setGpioOutState(self.acpin,int(val))
 			elif (key == "pcpower"):
@@ -37,6 +37,9 @@ class RpiPin():
 			elif (key == "rx570x4"):
 				#this pin should be inverse
 				self.setGpioOutState(self.rx570x4,self.setRelayPinOut(int(val)))
+			elif (key == "fan"):
+				#this pin should be inverse
+				self.setGpioOutState(self.fan,self.setRelayPinOut(int(val)))
 
 		return self.getPinStatus()
 
@@ -57,7 +60,7 @@ class RpiPin():
 			'acpower':self.readPin(self.acpin),
 			'pcpower':self.readPin(self.pcpin),
 			'inverter_serial':self.setRelayPinOut(self.readPin(self.inverter)),
-			'inverter_relay':self.setRelayPinOut(self.readPin(self.invRelay)),
+			'fan':self.setRelayPinOut(self.readPin(self.fan)),
 			'rx570x4':self.setRelayPinOut(self.readPin(self.rx570x4))
 			}
 		return data

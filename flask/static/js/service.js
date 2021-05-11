@@ -52,7 +52,7 @@ $.ajax ({
 	success: function(data){
                 Object.keys(data).forEach(function(key) {
 			$('#'+key).prop('checked',data[key]);
-			console.log(data);
+			console.log("switch status "+key+" -> "+data);
 		
 		});
 
