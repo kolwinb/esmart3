@@ -11,17 +11,21 @@ def runRobot(BatCap):
 	pc_ac=18
 	fan=20
 	hourArr=[8,9,10,11,12,13,14] #handling cloudy day
+
+#	chargeLowCycle=0
 	
 	print ("Battery Level: {}% (low < 50, high > 90)".format(BatCap))
 	now=datetime.now()
 	print ("Current Date :{}".format(now))
 	print ("hour :{}, minute:{}, second:{}".format(now.hour,now.minute,now.second))
 #	pinStatus=RpiPin().getPinStatus()
-
-	if (( now.hour >= 11 ) and (now.hour < 15)):
+	startTime=now.replace(hour=9,minute=30,second=0,microsecond=0)
+#	if (( now.hour >= 10 ) and (now.hour < 15)):
+	if (( now >= startTime ) and (now.hour < 15)):
 		#inverter line
 
 		if ( BatCap <= 50 ):
+#			chargeLowCycle += 1
 			RpiPin().setPinState({"inverter":0})
 #			fanOn(0,1)
 			RpiPin().setPinState({"fan":1})
@@ -30,7 +34,7 @@ def runRobot(BatCap):
 			switchoff.setPin(invtMode) #inverter 230v line
 			print ("INFO : batcap < 50 : switch off ac/pc,invtmod,rtx570")
 			checkOtherSwitch(on,off)
-			sleep(5)
+#			sleep(5)
 			print ("INFO : batcap < 50 : switch on ac/pc,invtmod,rtx570")
 			checkOtherSwitch(off,on)
 #			sleep(10)
@@ -40,7 +44,9 @@ def runRobot(BatCap):
 #			switchon.setPin(pc_ac)
 
 			if now.hour in hourArr: #handling cloudy day
+#			if (now.hour < 10) and (chargeLowCycle = 2): #handling cloudy day
 				print("at time {} in cloudy time. wait until hour to recover",now.hour)
+#				chargeLowCycle=0
 				sleep(3600)
 #			print ("info : Battery Low ({}%)".format(BatCap))
 			#send signal to inverter turn off (ongrid on)
@@ -56,11 +62,11 @@ def runRobot(BatCap):
 			sleep(5) #delay for automatic switch
 			print("INFO:batcap > 98 : switch off ac/pc and rtx570")
 			checkOtherSwitch(on,off)
-			sleep(5)
+#			sleep(5)
 			print("INFO:batcap > 98 : switch on ac/pc, invertMode")
 			checkOtherSwitch(off,on)
 			print("waiting batcap < 98")
-			sleep(120)
+#			sleep(120)
 #			switchoff.setPin(pc_ac)
 #			sleep(5)
 #			switchon.setPin(invtMode)
@@ -75,24 +81,28 @@ def runRobot(BatCap):
 		print ("18:28 pm will shutdown")
 #		switchoff.setPin(invtMode)
 #		switchoff.setPin(fan)
-		RpiPin().setPinState({"fan":0})
-		switchoff.setPin(pc_ac)
-		switchoff.setPinRelay(rx570)
+#		RpiPin().setPinState({"fan":0})
+#		switchoff.setPin(pc_ac)
+#		switchoff.setPinRelay(rx570)
 	elif (( now.hour == 22 ) and ( now.minute == 31 ) and ( now.second == 0 )):
 		print ("22:31 pm started")
 		#time on (10:31 pm)
 #		switchon.setPin(fan)
-		RpiPin().setPinState({"fan":1})
-		switchon.setPinRelay(rx570)
+#		RpiPin().setPinState({"fan":1})
+#		switchon.setPinRelay(rx570)
 #		switchon.setPin(invtMode)
-		sleep(5)
-		switchon.setPin(pc_ac)
+#		sleep(5)
+#		switchon.setPin(pc_ac)
 	else:
 		pinStatus=RpiPin().getPinStatus()
+		#run when reboot the pi
 		if (pinStatus["inverter_serial"] == 1):
 			#inverter will off then ongrid on state.
 			switchoff.setPin(invtMode) #inverter 230v line
 			RpiPin().setPinState({"inverter":0}) #data link power controller
+		else:
+			checkOtherSwitch(0,1)
+
 			#sleep(3)
 			#checkOtherSwitch()
 #		checkOtherSwitch(1,0)

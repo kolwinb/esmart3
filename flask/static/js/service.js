@@ -163,6 +163,49 @@ $('#rx570x4').click(function () {
 	}
 });
 
+//shutdown gigabyte pc
+$('#shutdownPc').click(function () {
+
+	if($('#shutdownPc').prop('checked')) {
+		console.log('shutdownPc press');
+		//data=["acpower",1]
+		//mechanical relay has needed to switch on by 0
+		var data = {
+		   "shutdownPc" : 1
+		}
+		setSwitchValues(data);
+	} else {
+		console.log('shutdownPc unpress');
+		//data=["acpower",0]
+		var data = {
+			"shutdownPc" : 0
+			}
+		setSwitchValues(data);
+	}
+});
+
+//start gigabyte pc
+$('#startPc').click(function () {
+
+	if($('#startPc').prop('checked')) {
+		console.log('startPc press');
+		//data=["acpower",1]
+		//mechanical relay has needed to switch on by 0
+		var data = {
+		   "startPc" : 1
+		}
+		setSwitchValues(data);
+	} else {
+		console.log('startPc unpress');
+		//data=["acpower",0]
+		var data = {
+			"startPc" : 0
+		}
+		setSwitchValues(data);
+	}
+});
+
+
 
 
 

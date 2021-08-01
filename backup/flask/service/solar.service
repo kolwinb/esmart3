@@ -1,0 +1,12 @@
+[Unit]
+Description=solar ac and fan sesson
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'cd /etc/opt/esmart3/flask && source venv/bin/activate && venv/bin/python3 solar.py'
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

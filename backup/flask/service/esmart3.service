@@ -1,0 +1,12 @@
+[Unit]
+Description=esmart3 flask backend
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'cd /etc/opt/esmart3/flask && source venv/bin/activate && venv/bin/python3 server.py'
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
