@@ -96,7 +96,7 @@ def runRobot(BatCap):
 	else:
 		pinStatus=RpiPin().getPinStatus()
 		#run when reboot the pi
-		if (pinStatus["inverter_serial"] == 1):
+		if (pinStatus["inverter_serial_21"] == 1):
 			#inverter will off then ongrid on state.
 			switchoff.setPin(invtMode) #inverter 230v line
 			RpiPin().setPinState({"inverter":0}) #data link power controller
@@ -112,7 +112,7 @@ def runRobot(BatCap):
 
 def fanOn(off,on):
 	pinStatus=RpiPin().getPinStatus()
-	if (pinStatus["fan"] == off): #cooling fan
+	if (pinStatus["fan_20"] == off): #cooling fan
 		RpiPin().setPinState({"fan":on})
 
 def checkOtherSwitch(off,on):
@@ -123,11 +123,11 @@ def checkOtherSwitch(off,on):
 #		RpiPin().setPinState({"pcpower":on})
 #		sleep(5)
 
-	if (pinStatus["rx570x4"] == off):
+	if (pinStatus["rx570x4_16"] == off):
 		RpiPin().setPinState({"rx570x4":on})
 
 	#checing inverter mode enabled or disabled
-	if (pinStatus["acpower"] == off):
+	if (pinStatus["PC_AC_SSR_power_18"] == off):
 		RpiPin().setPinState({"acpower":on}) #ac/pc
 
 

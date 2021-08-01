@@ -12,16 +12,20 @@ def runRobot(BatCap):
 	fan=20
 	hourArr=[8,9,10,11,12,13,14] #handling cloudy day
 
+#	chargeLowCycle=0
+	
 	print ("Battery Level: {}% (low < 50, high > 90)".format(BatCap))
 	now=datetime.now()
 	print ("Current Date :{}".format(now))
 	print ("hour :{}, minute:{}, second:{}".format(now.hour,now.minute,now.second))
 #	pinStatus=RpiPin().getPinStatus()
-
-	if (( now.hour >= 9 ) and (now.hour < 15)):
+	startTime=now.replace(hour=9,minute=30,second=0,microsecond=0)
+#	if (( now.hour >= 10 ) and (now.hour < 15)):
+	if (( now >= startTime ) and (now.hour < 15)):
 		#inverter line
 
 		if ( BatCap <= 50 ):
+#			chargeLowCycle += 1
 			RpiPin().setPinState({"inverter":0})
 #			fanOn(0,1)
 			RpiPin().setPinState({"fan":1})
@@ -40,7 +44,9 @@ def runRobot(BatCap):
 #			switchon.setPin(pc_ac)
 
 			if now.hour in hourArr: #handling cloudy day
+#			if (now.hour < 10) and (chargeLowCycle = 2): #handling cloudy day
 				print("at time {} in cloudy time. wait until hour to recover",now.hour)
+#				chargeLowCycle=0
 				sleep(3600)
 #			print ("info : Battery Low ({}%)".format(BatCap))
 			#send signal to inverter turn off (ongrid on)
@@ -90,7 +96,7 @@ def runRobot(BatCap):
 	else:
 		pinStatus=RpiPin().getPinStatus()
 		#run when reboot the pi
-		if (pinStatus["inverter_serial"] == 1):
+		if (pinStatus["inverter_serial_21"] == 1):
 			#inverter will off then ongrid on state.
 			switchoff.setPin(invtMode) #inverter 230v line
 			RpiPin().setPinState({"inverter":0}) #data link power controller
@@ -106,7 +112,7 @@ def runRobot(BatCap):
 
 def fanOn(off,on):
 	pinStatus=RpiPin().getPinStatus()
-	if (pinStatus["fan"] == off): #cooling fan
+	if (pinStatus["fan_20"] == off): #cooling fan
 		RpiPin().setPinState({"fan":on})
 
 def checkOtherSwitch(off,on):
@@ -117,11 +123,11 @@ def checkOtherSwitch(off,on):
 #		RpiPin().setPinState({"pcpower":on})
 #		sleep(5)
 
-	if (pinStatus["rx570x4"] == off):
+	if (pinStatus["rx570x4_16"] == off):
 		RpiPin().setPinState({"rx570x4":on})
 
 	#checing inverter mode enabled or disabled
-	if (pinStatus["acpower"] == off):
+	if (pinStatus["PC_AC_SSR_power_18"] == off):
 		RpiPin().setPinState({"acpower":on}) #ac/pc
 
 
