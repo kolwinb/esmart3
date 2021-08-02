@@ -231,6 +231,7 @@ console.log(data);
 
 function dataRequest(url,varAutoPower){
 	//console.log(url)
+/* disable solar data, backend error occured when two request
 	$.ajax({
 		url:url,
 		type:"POST",
@@ -247,4 +248,5 @@ function dataRequest(url,varAutoPower){
 
 		} //success
 	}); //ajax
+*/
 }//function

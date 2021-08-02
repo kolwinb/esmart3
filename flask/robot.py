@@ -20,8 +20,9 @@ def runRobot(BatCap):
 	print ("hour :{}, minute:{}, second:{}".format(now.hour,now.minute,now.second))
 #	pinStatus=RpiPin().getPinStatus()
 	startTime=now.replace(hour=9,minute=30,second=0,microsecond=0)
+	endTime=now.replace(hour=15,minute=0,second=0,microsecond=0)
 #	if (( now.hour >= 10 ) and (now.hour < 15)):
-	if (( now >= startTime ) and (now.hour < 15)):
+	if (( now >= startTime ) and (now < endTime)):
 		#inverter line
 
 		if ( BatCap <= 50 ):
@@ -135,7 +136,10 @@ def checkOtherSwitch(off,on):
 
 while True:
 	ChgSts=esmart()
-	chgData=ChgSts.ctlEsmart(ChgSts.config.getChgSts)
+	try:
+		chgData=ChgSts.ctlEsmart(ChgSts.config.getChgSts)
+	except:
+		print ("array  exception error occured")
 	print ("Data : {}".format(chgData))
 	BatCap=chgData['BatCap']
 	#run other switch if did not run
