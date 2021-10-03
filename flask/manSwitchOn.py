@@ -24,9 +24,9 @@ def setPinRelay(pin):
 #setPin(pc)
 #sleep (5)
 #rx570
-setPinRelay(rx570)
+#setPinRelay(rx570)
 #time.sleep(5)
 #pc
 #ac
 setPin(ac)
-setPinRelay(fan)
+#setPinRelay(fan)
