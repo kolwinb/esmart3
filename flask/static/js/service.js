@@ -51,9 +51,18 @@ $.ajax ({
 	data:"",
 	success: function(data){
                 Object.keys(data).forEach(function(key) {
-			$('#'+key).prop('checked',data[key]);
-			console.log("switch status "+key+" -> "+data);
-		
+            if (key == 'powerStatus_10') {
+            	$('#powerStatus').text(data[key])
+            	if (data[key] == 'OK'){
+            		$('#powerStatus').css("color","green")
+            	} else {
+            		$('#powerStatus').css("color","red")
+            	}
+            }
+            else {
+				$('#'+key).prop('checked',data[key]);
+				console.log("switch status "+key+" -> "+data[key]);
+			}
 		});
 
 	}
@@ -73,17 +82,17 @@ $('#autopower').click(function () {
 		}
 });
 
-//inverter on/off 
-$('#inverter').click(function () {
+//inverter serial remote on/off 
+$('#inv_serial_21').click(function () {
 
-	if($('#inverter').prop('checked')) {
+	if($('#inv_serial_21').prop('checked')) {
 		console.log('inverter power saver on');
 		//data=["acpower",1]
 		//inverter make pulse until ac load consume, so if not consume ac power, auto-switch will misbehave
 		var data = {
 //		   "acpower" : 1,
 //		   "pcpower" : 1,
-		   "inverter" : 1
+		   "inv_serial_21" : 1
 		}
 		//send data to server
 		setSwitchValues(data);
@@ -93,7 +102,35 @@ $('#inverter').click(function () {
 		var data = {
 //			"acpower" : 0,
 //			"pcpower": 0,
-			"inverter" : 0
+			"inv_serial_21" :0
+		}
+		//send data to server
+		setSwitchValues(data);
+	}
+//	location.reload(); //reload page
+});
+
+//inverter ac line on/off 
+$('#inv_line_17').click(function () {
+
+	if($('#inv_line_17').prop('checked')) {
+		console.log('inverter power saver on');
+		//data=["acpower",1]
+		//inverter make pulse until ac load consume, so if not consume ac power, auto-switch will misbehave
+		var data = {
+//		   "acpower" : 1,
+//		   "pcpower" : 1,
+		   "inv_line_17" : 1
+		}
+		//send data to server
+		setSwitchValues(data);
+	} else {
+		console.log('inverter power saver off');
+		//data=["acpower",0]
+		var data = {
+//			"acpower" : 0,
+//			"pcpower": 0,
+			"inv_line_17" :0
 		}
 		//send data to server
 		setSwitchValues(data);
@@ -214,6 +251,7 @@ $('#startPc').click(function () {
 
 //raspberry pi change pin state
 function setSwitchValues(data){
+console.log(data);
 $.ajax({
 url:"/esmart3/SwitchToggle",
 type:"POST",

@@ -3,34 +3,40 @@ from time import sleep
 
 class RpiPin():
 	def __init__(self):
+		GPIO.setwarnings(False)
+		GPIO.setmode(GPIO.BCM)
 		self.pc_ac_ssr_pin=18
 		self.inv_ssr_pin=17
 		self.inv_serial=21
 		self.fan=20
 		self.rx570x4=16
 		self.pcShutdown=4
+		self.powerStatus=10
+		GPIO.setup(self.powerStatus,GPIO.IN)
+		self.setGpioOutState(self.pc_ac_ssr_pin,1)
 		#default position this will refresh if you browser refresh
 		#put crontab to default 1 in inverter and rx570x4
 #		self.data={"inverter":"0","rx570x4":"0"}
 #		self.setPinState(self.data)
 
+
 	def setPinConfi(self,pin):
-		GPIO.setwarnings(False)
-		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(pin,GPIO.OUT)
 
 	def setPinState(self,data):
 		for key,val in data.items():
-			if (key == "inverter"):
+			if (key == "inv_line_17"):
 				#this pin should be inverse
 				#invt mode on
-				self.setGpioOutState(self.inv_serial,self.setRelayPinOut(int(val)))
+				self.setGpioOutState(self.inv_ssr_pin,int(val))
+#				self.setGpioOutState(self.fan,int(val))
 				#delay to swith relay between interter-->load
 #				if (val == 1):
 #					self.setGpioOutState(self.invRelay,self.setRelayPinOut(int(val)))
 #				else:
 				#sleep(5)
-				self.setGpioOutState(self.fan,self.setRelayPinOut(int(val)))
+			elif (key == "inv_serial_21"):
+				self.setGpioOutState(self.inv_serial,self.setRelayPinOut(int(val)))
 			elif (key == "acpower"):
 				self.setGpioOutState(self.pc_ac_ssr_pin,int(val))
 			elif (key == "pcpower"):
@@ -58,7 +64,7 @@ class RpiPin():
 	#enable/disable state of pin
 	def setGpioOutState(self,pin,val):
 		self.setPinConfi(pin)
-		print(val)
+		print("Rpi:GPIO "+str(pin)+" : "+str(val))
 		GPIO.output(pin,val)
 
 	#read pin status
@@ -66,16 +72,22 @@ class RpiPin():
 		self.setPinConfi(pin)
 		return GPIO.input(pin)
 
+	def getPowerStatus(self):
+		if GPIO.input(self.powerStatus) == False:
+			return "OK"
+		else:
+			return "Failure"
 
 	def getPinStatus(self):
 		data = {
 			'PC_AC_SSR_power_18':self.readPin(self.pc_ac_ssr_pin),
-			'INV_Line_SSR_power_17':self.readPin(self.inv_ssr_pin),
-			'inverter_serial_21':self.setRelayPinOut(self.readPin(self.inv_serial)),
+			'inv_line_17':self.readPin(self.inv_ssr_pin),
+			'inv_serial_21':self.setRelayPinOut(self.readPin(self.inv_serial)),
 			'fan_20':self.setRelayPinOut(self.readPin(self.fan)),
 			'rx570x4_16':self.setRelayPinOut(self.readPin(self.rx570x4)),
 			'shutdownPc_4':self.readPin(self.pcShutdown),
-			'startPc_4':self.readPin(self.pcShutdown)
+			'startPc_4':self.readPin(self.pcShutdown),
+			'powerStatus_10':self.getPowerStatus()
 			}
 		return data
 

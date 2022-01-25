@@ -22,7 +22,7 @@ def setSwitchToggle():
 	if request.method == 'POST':
 		data = request.form
 #		data = json.loads(request.data)
-#		print(data)
+#		print(" setSwitchToggle : {}",format(data))
 		#manual mode
 		setpinState=Rpi.RpiPin()
 		return jsonify(setpinState.setPinState(data))
